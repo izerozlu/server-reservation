@@ -23,6 +23,47 @@
         {{ modifier }}
       </h3>
     </div>
+    <template v-if="isDaySelected">
+      <h4
+        class="
+          day__server-header
+          text-base
+          flex
+          items-center
+          justify-center
+          pl-12
+        "
+      >
+        Integration
+      </h4>
+      <div
+        class="
+          day__server-columns
+          server-columns
+          flex
+          justify-start
+          pl-12
+          divide-x divide-gray-300
+          h-6
+          self-center
+        "
+      >
+        <h5
+          v-for="server in servers"
+          :key="server"
+          class="
+            server-columns__column
+            flex
+            items-center
+            justify-center
+            flex-1
+            text-center
+          "
+        >
+          {{ server }}
+        </h5>
+      </div>
+    </template>
     <Zone
       v-for="timezone in timezones"
       :key="timezone.id"
@@ -43,6 +84,7 @@ import Day from '~/interfaces/day';
 
 interface DayData {
   timezones: Timezone[];
+  servers: string[];
 }
 
 export default Vue.extend({
@@ -68,6 +110,7 @@ export default Vue.extend({
 
     return {
       timezones,
+      servers: new Array(5).fill(0).map((_, index) => (index + 1).toString()),
     };
   },
   computed: {
