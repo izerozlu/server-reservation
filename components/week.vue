@@ -1,5 +1,5 @@
 <template>
-  <div class="week h-full grid grid-flow-col grid-cols-6 gap-x-2 px-2 py-4">
+  <div class="week h-full grid grid-flow-col grid-cols-6 gap-x-3 px-2 py-4">
     <Day
       v-for="day in days"
       :key="day.name"
@@ -23,11 +23,11 @@ export default Vue.extend({
   data(): WeekData {
     return {
       days: [
-        { name: 'Monday', weekday: 1 },
-        { name: 'Tuesday', weekday: 2 },
-        { name: 'Wednesday', weekday: 3 },
-        { name: 'Thursday', weekday: 4 },
-        { name: 'Friday', weekday: 5 },
+        { name: 'Monday', weekday: 1, id: '1' },
+        { name: 'Tuesday', weekday: 2, id: '2' },
+        { name: 'Wednesday', weekday: 3, id: '3' },
+        { name: 'Thursday', weekday: 4, id: '4' },
+        { name: 'Friday', weekday: 5, id: '5' },
       ],
     };
   },

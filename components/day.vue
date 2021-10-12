@@ -14,8 +14,10 @@
       {
         'col-span-2': isDaySelected,
         'day--selected': isDaySelected,
+        'cursor-pointer': !isDaySelected,
       },
     ]"
+    @click="updateSelectedDay(day.weekday)"
   >
     <div class="day__header flex justify-between">
       <h2 class="day__title capitalize text-2xl">{{ day.name }}</h2>
@@ -31,7 +33,7 @@
           flex
           items-center
           justify-center
-          pl-12
+          pl-9
         "
       >
         Integration
@@ -42,35 +44,39 @@
           server-columns
           flex
           justify-start
-          pl-12
+          pl-9
           divide-x divide-gray-300
           h-6
           self-center
         "
       >
         <h5
-          v-for="server in servers"
-          :key="server"
+          v-for="column in columns"
+          :key="column"
           class="
             server-columns__column
+            column
             flex
             items-center
             justify-center
             flex-1
             text-center
           "
+          :class="{
+            'column--hovered': hoveredColumn === column,
+            'bg-gray-200': hoveredColumn === column,
+          }"
         >
-          {{ server }}
+          {{ column }}
         </h5>
       </div>
     </template>
-    <Zone
+    <Timezone
       v-for="timezone in timezones"
       :key="timezone.id"
       class="day__zone"
       :timezone="timezone"
       :is-day-selected="isDaySelected"
-      @click="updateSelectedDay(day.weekday)"
     />
   </div>
 </template>
@@ -84,7 +90,7 @@ import Day from '~/interfaces/day';
 
 interface DayData {
   timezones: Timezone[];
-  servers: string[];
+  columns: number[];
 }
 
 export default Vue.extend({
@@ -105,20 +111,24 @@ export default Vue.extend({
           index % 2 === 0 ? ':00' : ':30'
         }`,
         id: index,
+        day: this.day,
       };
     });
 
     return {
       timezones,
-      servers: new Array(5).fill(0).map((_, index) => (index + 1).toString()),
+      columns: new Array(5).fill(0).map((_, index) => index + 1),
     };
   },
   computed: {
-    ...mapState('store', ['selectedDay']),
+    ...mapState('store', ['selectedDay', 'hoveredBlock']),
     isDaySelected() {
       return !this.selectedDay
         ? this.modifier === 'today'
         : this.selectedDay === this.day.weekday;
+    },
+    hoveredColumn(): number {
+      return this.hoveredBlock?.column;
     },
   },
   methods: {
@@ -130,6 +140,11 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .day--selected {
   outline: 4px solid var(--primary-color);
+  border-color: transparent;
+}
+
+.day:not(.day--selected):hover {
+  outline: 4px dashed var(--primary-color);
   border-color: transparent;
 }
 </style>
