@@ -9,27 +9,16 @@
       'cursor-pointer': !isDaySelected,
     }"
     type="button"
-    @click="handleTimezoneClick"
   >
     <template v-if="!isSelectedTimezone">{{ timezone.zone }}</template>
     <template v-else>
       <span class="timezone__time w-8">{{ timezone.zone }}</span>
       <div class="timezone__blocks blocks flex items-center w-full h-full px-2">
-        <!-- TODO [ozlui] extract this button into a Block component -->
-        <button
+        <Block
           v-for="block in blocks"
           :key="block.id"
-          class="timezone__block block h-full rounded flex-1"
-          :class="{
-            'server-block--taken': block.isTaken,
-            'bg-red-400': block.isTaken,
-            'hover:bg-gray-200': !block.isTaken,
-          }"
-          type="button"
-          :disabled="block.isTaken"
-          @click="() => takeBlock(block)"
-          @mouseenter="() => hoverBlock({ block, isEnter: true })"
-          @mouseleave="() => hoverBlock({ block, isEnter: false })"
+          :block="block"
+          class="timezone__block"
         />
       </div>
     </template>
@@ -40,17 +29,20 @@
 import Vue from 'vue';
 import { mapState, mapActions } from 'vuex';
 
-import Timezone from '~/interfaces/timezone';
-import Block from '~/interfaces/block';
+import Block from '~/components/block.vue';
 
-interface ZoneData {
-  blocks: Block[];
+import TimezoneTemplate from '~/interfaces/timezone-template';
+import BlockTemplate from '~/interfaces/block-template';
+
+interface ComponentData {
+  blocks: BlockTemplate[];
 }
 
 export default Vue.extend({
+  components: { Block },
   props: {
     timezone: {
-      type: Object as () => Timezone,
+      type: Object as () => TimezoneTemplate,
       default: null,
     },
     isDaySelected: {
@@ -58,7 +50,7 @@ export default Vue.extend({
       default: false,
     },
   },
-  data(): ZoneData {
+  data(): ComponentData {
     return {
       blocks: new Array(5).fill(0).map((_, index: number) => {
         return {
