@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/named
 import { ActionContext } from 'vuex';
 
-import Block from '~/interfaces/block';
+import Block from '~/interfaces/block-template';
 
 export interface State {
   selectedDay: number | null;

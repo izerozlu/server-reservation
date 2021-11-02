@@ -85,18 +85,18 @@
 import Vue from 'vue';
 import { mapState, mapActions } from 'vuex';
 
-import Timezone from '~/interfaces/timezone';
-import Day from '~/interfaces/day';
+import TimezoneTemplate from '~/interfaces/timezone-template';
+import DayTemplate from '~/interfaces/day-template';
 
-interface DayData {
-  timezones: Timezone[];
+interface ComponentData {
+  timezones: TimezoneTemplate[];
   columns: number[];
 }
 
 export default Vue.extend({
   props: {
     day: {
-      type: Object as () => Day,
+      type: Object as () => DayTemplate,
       default: null,
     },
     modifier: {
@@ -104,7 +104,7 @@ export default Vue.extend({
       default: null,
     },
   },
-  data(): DayData {
+  data(): ComponentData {
     const timezones = new Array(19).fill(0).map((_, index) => {
       return {
         zone: `${Math.floor((index + 18) / 2)}${

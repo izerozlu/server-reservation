@@ -12,15 +12,15 @@
 <script lang="ts">
 import Vue from 'vue';
 
-import Day from '~/interfaces/day';
-import DayModifier from '~/interfaces/day-modifier';
+import DayTemplate from '~/interfaces/day-template';
+import DayModifier from '~/types/day-modifier';
 
-interface WeekData {
-  days: Day[];
+interface ComponentData {
+  days: DayTemplate[];
 }
 
 export default Vue.extend({
-  data(): WeekData {
+  data(): ComponentData {
     return {
       days: [
         { name: 'Monday', weekday: 1, id: '1' },
@@ -33,7 +33,7 @@ export default Vue.extend({
   },
   methods: {
     getDayModifier: (weekday: number): DayModifier | null => {
-      const today = 3 || new Date().getDay();
+      const today = new Date().getDay();
       switch (weekday) {
         case today - 1:
           return 'yesterday';
